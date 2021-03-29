@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Select from 'react-select';
 import './App.css';
 
 function App() {
@@ -7,6 +6,7 @@ function App() {
   const [cycles, setCycles] = useState([]);
   const [selectedSide, setSelectedSide] = useState("corp");
   const [sides, setSides] = useState([]);
+
   const bannedCards = ["30077"]; //TODO: add more
   const packs = ["sg", "su21", "df", "ur"];
 
@@ -28,37 +28,26 @@ function App() {
     fetch("https://netrunnerdb.com/api/2.0/public/sides")
       .then(res => res.json())
       .then(response => {
-        response.data[0].label = "Corp";
-        response.data[0].value = "corp";
         setSides(response.data);
       })
     ;
   }, [])
 
-  /*
-  ChangeSide = (selectedOption) => {
-    setSelectedSide(selectedOption);
+  function OnChangeSide(event) {
+    setSelectedSide(event.target.value);
   }
-  
-  ChangeSide(optionSelected) {
-    setSelectedSide(optionSelected.value);
-  }
-*/
+
   return (
     <div className="App">
       <span>Side: </span>
-      <Select
-        options = {sides}
-      />
-      {/*
-      <select onChange={this.ChangeSide} value={selectedSide}>
+      <select onChange={OnChangeSide} value={selectedSide}>
         {
           sides.sort((a, b) => a.name.localeCompare(b.name)).map((side, index) => (
             <option value={side.code}>{side.name}</option>
           ))
         }
       </select>
-      */}
+      
 
       <span>&emsp;Faction: </span>
       <select>
