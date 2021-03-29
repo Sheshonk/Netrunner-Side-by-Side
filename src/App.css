@@ -2,3 +2,8 @@ body {
     background-color: black;
     color: white;
 }
+
+.card-image {
+    margin: 10px;
+    width: 250px;
+}
