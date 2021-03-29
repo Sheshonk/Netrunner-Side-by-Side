@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
+import Select from 'react-select';
 import './App.css';
 
 function App() {
   const [cards, setCards] = useState([]);
   const [cycles, setCycles] = useState([]);
+  const [selectedSide, setSelectedSide] = useState("corp");
+  const [sides, setSides] = useState([]);
   const bannedCards = ["30077"]; //TODO: add more
   const packs = ["sg", "su21", "df", "ur"];
 
@@ -21,11 +24,51 @@ function App() {
         setCycles(response.data);
       })
     ;
+
+    fetch("https://netrunnerdb.com/api/2.0/public/sides")
+      .then(res => res.json())
+      .then(response => {
+        response.data[0].label = "Corp";
+        response.data[0].value = "corp";
+        setSides(response.data);
+      })
+    ;
   }, [])
 
+  /*
+  ChangeSide = (selectedOption) => {
+    setSelectedSide(selectedOption);
+  }
+  
+  ChangeSide(optionSelected) {
+    setSelectedSide(optionSelected.value);
+  }
+*/
   return (
     <div className="App">
-      <h1>Corp</h1>
+      <span>Side: </span>
+      <Select
+        options = {sides}
+      />
+      {/*
+      <select onChange={this.ChangeSide} value={selectedSide}>
+        {
+          sides.sort((a, b) => a.name.localeCompare(b.name)).map((side, index) => (
+            <option value={side.code}>{side.name}</option>
+          ))
+        }
+      </select>
+      */}
+
+      <span>&emsp;Faction: </span>
+      <select>
+        <option value="A">A</option>
+        <option value="B">B</option>
+      </select>
+
+      <span>&emsp;{selectedSide}</span>
+
+      <hr />
 
       <h2>Identites</h2>
       {cards.filter(card => card.side_code === "corp" && card.type_code === "identity" && packs.includes(card.pack_code) && !bannedCards.includes(card.code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (

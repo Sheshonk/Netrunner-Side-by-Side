@@ -3,6 +3,10 @@ body {
     color: white;
 }
 
+select {
+    color: black;
+}
+
 .card-image {
     margin: 10px;
     width: 250px;
