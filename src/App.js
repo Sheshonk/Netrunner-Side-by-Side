@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import './App.css';
 
 /*
+DRY card display
 format drop down
 banned list
-DRY card display
 runner cards
 rob types
 */
@@ -62,6 +62,17 @@ function App() {
     setSelectedFactionCodes(factions.filter(faction => faction.side_code === newVal).map(faction => faction.code));
   }
 
+  function RenderCard(title, typeCode) {
+    let filteredCards = cards;
+
+    filteredCards = filteredCards.filter(card => card.side_code === selectedSideCode && card.type_code === typeCode && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code))
+    filteredCards = filteredCards.sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title))
+
+    return filteredCards.map((card, index) => (
+      <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
+    ));
+  }
+
   return (
     <div className="App">
       <span>Format: </span>
@@ -88,6 +99,7 @@ function App() {
       </select>
   
       <hr />
+      {RenderCard("Identities", "identity")}
 
       <h2>Identites</h2>
       {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "identity" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
