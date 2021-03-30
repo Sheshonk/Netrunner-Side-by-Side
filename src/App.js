@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import './App.css';
 
 /*
-format drop down
 banned list
 runner cards
 rob types
@@ -12,13 +11,47 @@ function App() {
   const [cards, setCards] = useState([]);
   const [factions, setFactions] = useState([]);
   const [selectedFactionCode, setSelectedFactionCode] = useState("");
-  const [selectedFactionCodes, setSelectedFactionCodes] = useState(["haas-bioroid", "jinteki", "nbn", "weyland-consortium", "neutral-corp"]);
+  const [selectedFactionCodes, setSelectedFactionCodes] = useState(["haas-bioroid", "jinteki", "nbn", "weyland-consortium", "neutral-corp"]); //TODO: load from hook
+  const [selectedFormat, setSelectedFormat] = useState("startup");
   const [selectedSideCode, setSelectedSideCode] = useState("");
   const [sides, setSides] = useState([]);
   const [types, setTypes] = useState([]);
 
-  const bannedCards = [/*Catalyst*/ "30076", /*Syndicate*/ "30077"]; //TODO: add more
-  const packs = ["sg", "su21", "df", "ur"];
+  const formats = [
+    {
+      code: "eternal",
+      name: "Eternal",
+      packs: ["sg", "su21", "df", "ur"],
+      bans: [
+        "30076", /*Catalyst*/ 
+        "30077", /*Syndicate*/ 
+      ]
+    },{
+      code: "snapshot",
+      name: "Snapshot",
+      packs: ["sg", "su21", "df", "ur"],
+      bans: [
+        "30076", /*Catalyst*/ 
+        "30077", /*Syndicate*/ 
+      ]
+    },{
+      code: "standard",
+      name: "Standard",
+      packs: ["sg", "su21", "df", "ur"],
+      bans: [
+        "30076", /*Catalyst*/ 
+        "30077", /*Syndicate*/ 
+      ]
+    },{
+      code: "startup",
+      name: "Startup",
+      packs: ["sg", "su21", "df", "ur"],
+      bans: [
+        "30076", /*Catalyst*/ 
+        "30077", /*Syndicate*/ 
+      ]
+    }
+  ];
 
   useEffect(() => {
     fetch("https://netrunnerdb.com/api/2.0/public/cards")
@@ -55,11 +88,15 @@ function App() {
     let newVal = event.target.value;
     
     setSelectedFactionCode(newVal);
-    if (newVal === "") {
+    if (newVal === "") { //TODO: do something better than magic string
       setSelectedFactionCodes(factions.filter(faction => faction.side_code === selectedSideCode).map(faction => faction.code));
     } else {
       setSelectedFactionCodes(["neutral-corp", "neutral-runner", newVal]);
     }
+  }
+
+  function OnChangeFormat(event) {
+    setSelectedFormat(event.target.value);
   }
 
   function OnChangeSide(event) {
@@ -71,9 +108,10 @@ function App() {
 
   function RenderCard(title, typeCode) {
     let filteredCards = cards;
+    let filteredFormat = formats.filter(format => format.code === selectedFormat)[0];
 
-    filteredCards = filteredCards.filter(card => card.side_code === selectedSideCode && card.type_code === typeCode && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code))
-    if (typeCode === "agenda") {
+    filteredCards = filteredCards.filter(card => card.side_code === selectedSideCode && card.type_code === typeCode && filteredFormat.packs.includes(card.pack_code) && !filteredFormat.bans.includes(card.code) && selectedFactionCodes.includes(card.faction_code))
+    if (typeCode === "agenda") { //TODO: pass sort in as parameter
       filteredCards = filteredCards.sort((a, b) => a.faction_code.localeCompare(b.faction_code) || b.agenda_points - a.agenda_points || a.advancement_cost - b.advancement_cost || a.title.localeCompare(b.title))
     } else {
       filteredCards = filteredCards.sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title))
@@ -85,7 +123,7 @@ function App() {
 
         {
           filteredCards.map((card, index) => (
-            <a href={`https://netrunnerdb.com/en/card/${card.code}`} target="_blank">
+            <a href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
               <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
             </a>
           ))
@@ -97,7 +135,13 @@ function App() {
   return (
     <div className="App">
       <span>Format: </span>
-      <select></select>
+      <select onChange={OnChangeFormat} value={selectedFormat}>
+        {
+          formats.map((format, index) => (
+            <option key={index} value={format.code}>{format.name}</option>
+          ))
+        }
+      </select>
 
       <span>&emsp;Side: </span>
       <select onChange={OnChangeSide} value={selectedSideCode}>
