@@ -66,11 +66,25 @@ function App() {
     let filteredCards = cards;
 
     filteredCards = filteredCards.filter(card => card.side_code === selectedSideCode && card.type_code === typeCode && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code))
-    filteredCards = filteredCards.sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title))
+    if (typeCode === "agenda") {
+      filteredCards = filteredCards.sort((a, b) => a.faction_code.localeCompare(b.faction_code) || b.agenda_points - a.agenda_points || a.advancement_cost - b.advancement_cost || a.title.localeCompare(b.title))
+    } else {
+      filteredCards = filteredCards.sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title))
+    }
 
-    return filteredCards.map((card, index) => (
-      <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-    ));
+    return ( 
+      <>
+        {filteredCards.length > 0 ? <h2>{title}</h2> : (null)}
+
+        {
+          filteredCards.map((card, index) => (
+            <a href={`https://netrunnerdb.com/en/card/${card.code}`} target="_blank">
+              <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
+            </a>
+          ))
+        }
+      </>
+    )
   }
 
   return (
@@ -100,18 +114,7 @@ function App() {
   
       <hr />
       {RenderCard("Identities", "identity")}
-
-      <h2>Identites</h2>
-      {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "identity" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
-        <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-      ))}
-
-      {selectedSideCode === "corp" ? <h2>Agendas</h2> : (null)}
-      {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "agenda" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || b.agenda_points - a.agenda_points || a.advancement_cost - b.advancement_cost || a.title.localeCompare(b.title)).map((card, index) => (
-        <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-      ))}
-
-      {selectedSideCode === "corp" ? <h2>Operations</h2> : (null)}
+      {RenderCard("Agendas", "agenda")}
       {/*
       Econ
       Card Draw
@@ -123,11 +126,7 @@ function App() {
 
       Other
       */}
-      {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "operation" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
-        <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-      ))}
-
-      {selectedSideCode === "corp" ? <h2>Assets</h2> : (null)}
+      {RenderCard("Operations", "operation")}
       {/*
       Econ
       Card Draw
@@ -139,25 +138,16 @@ function App() {
 
       Other
       */}
-      {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "asset" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
-        <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-      ))}
-
-      {selectedSideCode === "corp" ? <h2>Upgrades</h2> : (null)}
-      {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "upgrade" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
-        <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-      ))}
-
-      {selectedSideCode === "corp" ? <h2>Ice</h2> : (null)}
+      {RenderCard("Assets", "asset")}
+      {RenderCard("Upgrades", "upgrade")}
       {/*
       Barrier
       Code Gate
       Sentry
       Other
       */}
-      {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "ice" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
-        <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-      ))}
+      {RenderCard("Ice", "ice")}
+
     </div>
   );
 }
