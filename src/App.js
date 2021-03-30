@@ -5,8 +5,9 @@ function App() {
   const [cards, setCards] = useState([]);
   const [cycles, setCycles] = useState([]);
   const [factions, setFactions] = useState([]);
-  const [selectedFaction, setSelectedFaction] = useState("");
-  const [selectedSide, setSelectedSide] = useState("corp");
+  const [selectedFactionCode, setSelectedFactionCode] = useState("");
+  const [selectedFactionCodes, setSelectedFactionCodes] = useState([]);
+  const [selectedSideCode, setSelectedSideCode] = useState("");
   const [sides, setSides] = useState([]);
 
   const bannedCards = [/*Catalyst*/ "30076", /*Syndicate*/ "30077"]; //TODO: add more
@@ -38,17 +39,27 @@ function App() {
       .then(res => res.json())
       .then(response => {
         setSides(response.data);
+        setSelectedSideCode(response.data[0].code);
       })
     ;
   }, [])
 
   function OnChangeFaction(event) {
-    setSelectedFaction(event.target.value);
+    let newVal = event.target.value;
+    
+    setSelectedFactionCode(newVal);
+    if (newVal === "") {
+      setSelectedFactionCodes(factions.filter(faction => faction.side_code === selectedSideCode).map(faction => faction.code));
+    } else {
+      setSelectedFactionCodes(["neutral-corp", "neutral-runner", newVal]);
+    }
   }
 
   function OnChangeSide(event) {
-    setSelectedFaction("");
-    setSelectedSide(event.target.value);
+    let newVal = event.target.value;
+    
+    setSelectedSideCode(newVal);
+    setSelectedFactionCodes(factions.filter(faction => faction.side_code === newVal).map(faction => faction.code));
   }
 
   return (
@@ -57,21 +68,21 @@ function App() {
       <select></select>
 
       <span>&emsp;Side: </span>
-      <select onChange={OnChangeSide} value={selectedSide}>
+      <select onChange={OnChangeSide} value={selectedSideCode}>
         {
           sides.sort((a, b) => a.name.localeCompare(b.name)).map((side, index) => (
-            <option value={side.code}>{side.name}</option>
+            <option key={index} value={side.code}>{side.name}</option>
           ))
         }
       </select>
       
 
       <span>&emsp;Faction: </span>
-      <select onChange={OnChangeFaction} value={selectedFaction}>
-        <option value={null}>All</option>
+      <select onChange={OnChangeFaction} value={selectedFactionCode}>
+        <option value="">All</option>
         {
-          factions.filter(faction => faction.side_code === selectedSide).sort((a, b) => a.name.localeCompare(b.name)).map((faction, index) => (
-            <option value={faction.code}>{faction.name}</option>
+          factions.filter(faction => faction.side_code === selectedSideCode).sort((a, b) => a.name.localeCompare(b.name)).map((faction, index) => (
+            <option key={index} value={faction.code}>{faction.name}</option>
           ))
         }
       </select>
@@ -79,16 +90,16 @@ function App() {
       <hr />
 
       <h2>Identites</h2>
-      {cards.filter(card => card.side_code === selectedSide && card.type_code === "identity" && packs.includes(card.pack_code) && !bannedCards.includes(card.code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
+      {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "identity" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
         <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
       ))}
 
-      {selectedSide === "corp" ? <h2>Agendas</h2> : (null)}
-      {cards.filter(card => card.side_code === selectedSide && card.type_code === "agenda" && packs.includes(card.pack_code) && !bannedCards.includes(card.code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || b.agenda_points - a.agenda_points || a.advancement_cost - b.advancement_cost || a.title.localeCompare(b.title)).map((card, index) => (
+      {selectedSideCode === "corp" ? <h2>Agendas</h2> : (null)}
+      {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "agenda" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || b.agenda_points - a.agenda_points || a.advancement_cost - b.advancement_cost || a.title.localeCompare(b.title)).map((card, index) => (
         <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
       ))}
 
-      {selectedSide === "corp" ? <h2>Operations</h2> : (null)}
+      {selectedSideCode === "corp" ? <h2>Operations</h2> : (null)}
       {/*
       Econ
       Card Draw
@@ -100,11 +111,11 @@ function App() {
 
       Other
       */}
-      {cards.filter(card => card.side_code === selectedSide && card.type_code === "operation" && packs.includes(card.pack_code) && !bannedCards.includes(card.code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
+      {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "operation" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
         <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
       ))}
 
-      {selectedSide === "corp" ? <h2>Assets</h2> : (null)}
+      {selectedSideCode === "corp" ? <h2>Assets</h2> : (null)}
       {/*
       Econ
       Card Draw
@@ -116,23 +127,23 @@ function App() {
 
       Other
       */}
-      {cards.filter(card => card.side_code === selectedSide && card.type_code === "asset" && packs.includes(card.pack_code) && !bannedCards.includes(card.code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
+      {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "asset" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
         <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
       ))}
 
-      {selectedSide === "corp" ? <h2>Upgrades</h2> : (null)}
-      {cards.filter(card => card.side_code === selectedSide && card.type_code === "upgrade" && packs.includes(card.pack_code) && !bannedCards.includes(card.code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
+      {selectedSideCode === "corp" ? <h2>Upgrades</h2> : (null)}
+      {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "upgrade" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
         <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
       ))}
 
-      {selectedSide === "corp" ? <h2>Ice</h2> : (null)}
+      {selectedSideCode === "corp" ? <h2>Ice</h2> : (null)}
       {/*
       Barrier
       Code Gate
       Sentry
       Other
       */}
-      {cards.filter(card => card.side_code === selectedSide && card.type_code === "ice" && packs.includes(card.pack_code) && !bannedCards.includes(card.code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
+      {cards.filter(card => card.side_code === selectedSideCode && card.type_code === "ice" && packs.includes(card.pack_code) && !bannedCards.includes(card.code) && selectedFactionCodes.includes(card.faction_code)).sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title)).map((card, index) => (
         <img alt={card.title} className="card-image" key={index} src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
       ))}
     </div>
