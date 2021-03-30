@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 
+/*
+format drop down
+banned list
+DRY card display
+runner cards
+rob types
+*/
+
 function App() {
   const [cards, setCards] = useState([]);
-  const [cycles, setCycles] = useState([]);
   const [factions, setFactions] = useState([]);
   const [selectedFactionCode, setSelectedFactionCode] = useState("");
-  const [selectedFactionCodes, setSelectedFactionCodes] = useState([]);
+  const [selectedFactionCodes, setSelectedFactionCodes] = useState(["haas-bioroid", "jinteki", "nbn", "weyland-consortium", "neutral-corp"]);
   const [selectedSideCode, setSelectedSideCode] = useState("");
   const [sides, setSides] = useState([]);
 
@@ -18,13 +25,6 @@ function App() {
       .then(res => res.json())
       .then(response => {
         setCards(response.data);
-      })
-    ;
-    
-    fetch("https://netrunnerdb.com/api/2.0/public/cycles")
-      .then(res => res.json())
-      .then(response => {
-        setCycles(response.data);
       })
     ;
 
