@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import './App.css';
 
 /*
-DRY card display
 format drop down
 banned list
 runner cards
@@ -16,6 +15,7 @@ function App() {
   const [selectedFactionCodes, setSelectedFactionCodes] = useState(["haas-bioroid", "jinteki", "nbn", "weyland-consortium", "neutral-corp"]);
   const [selectedSideCode, setSelectedSideCode] = useState("");
   const [sides, setSides] = useState([]);
+  const [types, setTypes] = useState([]);
 
   const bannedCards = [/*Catalyst*/ "30076", /*Syndicate*/ "30077"]; //TODO: add more
   const packs = ["sg", "su21", "df", "ur"];
@@ -40,6 +40,13 @@ function App() {
       .then(response => {
         setSides(response.data);
         setSelectedSideCode(response.data[0].code);
+      })
+    ;
+
+    fetch("https://netrunnerdb.com/api/2.0/public/types")
+      .then(res => res.json())
+      .then(response => {
+        setTypes(response.data);
       })
     ;
   }, [])
@@ -113,41 +120,36 @@ function App() {
       </select>
   
       <hr />
-      {RenderCard("Identities", "identity")}
-      {RenderCard("Agendas", "agenda")}
+      {
+        types.sort((a, b) => a.position - b.position).map((type, index) => (
+          RenderCard(type.name, type.code)
+        ))
+      }
       {/*
-      Econ
-      Card Draw
-      Tutor
-      Additional Clicks
-      Kill
-      Recursion
-      Lockdown
-
-      Other
+      operation
+        Econ
+        Card Draw
+        Tutor
+        Additional Clicks
+        Kill
+        Recursion
+        Lockdown
+        Other
+      asset
+        Econ
+        Card Draw
+        Tutor
+        Additional Clicks
+        Kill
+        Recursion
+        Lockdown
+        Other
+      ice
+        Barrier
+        Code Gate
+        Sentry
+        Other
       */}
-      {RenderCard("Operations", "operation")}
-      {/*
-      Econ
-      Card Draw
-      Tutor
-      Additional Clicks
-      Kill
-      Recursion
-      Lockdown
-
-      Other
-      */}
-      {RenderCard("Assets", "asset")}
-      {RenderCard("Upgrades", "upgrade")}
-      {/*
-      Barrier
-      Code Gate
-      Sentry
-      Other
-      */}
-      {RenderCard("Ice", "ice")}
-
     </div>
   );
 }
