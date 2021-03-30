@@ -3,7 +3,7 @@ import './App.css';
 
 /*
 banned list
-runner cards
+remove dups
 rob types
 */
 
@@ -19,25 +19,42 @@ function App() {
 
   const formats = [
     {
-      code: "eternal",
-      name: "Eternal",
-      packs: ["sg", "su21", "df", "ur"],
-      bans: [
-        "30076", /*Catalyst*/ 
-        "30077", /*Syndicate*/ 
-      ]
-    },{
-      code: "snapshot",
-      name: "Snapshot",
-      packs: ["sg", "su21", "df", "ur"],
-      bans: [
-        "30076", /*Catalyst*/ 
-        "30077", /*Syndicate*/ 
-      ]
-    },{
       code: "standard",
       name: "Standard",
-      packs: ["sg", "su21", "df", "ur"],
+      packs: [
+        "oac", /*Order and Chaos*/
+        "dad", /*Data and Destiny*/
+        "kg", /*Mumbad - Kala Ghoda*/
+        "bf", /*Mumbad - Business First*/
+        "dag", /*Mumbad - Democracy and Dogma*/
+        "si", /*Mumbad - Salsette Island*/
+        "tlm", /*Mumbad - The Liberated Mind*/
+        "ftm", /*Mumbad - Fear the Masses*/
+        "23s", /*Flashpoint - 23 Seconds*/
+        "bm", /*Flashpoint - Blood Money*/
+        "es", /*Flashpoint - Escalation*/
+        "in", /*Flashpoint - Intervention*/
+        "ml", /*Flashpoint - Martial Law*/
+        "qu", /*Flashpoint - Quorum*/
+        "dc", /*Red Sand - Daedalus Complex*/
+        "so", /*Red Sand - Station One*/
+        "eas", /*Red Sand - Earth's Scion*/
+        "baw", /*Red Sand - Blood and Water*/
+        "fm", /*Red Sand - Free Mars*/
+        "cd", /*Red Sand - Crimson Dust*/
+        "ss", /*Kitara - Sovereign Sight*/
+        "dtwn", /*Kitara - Down the White Nile*/
+        "cotc", /*Kitara - Council of the Crest*/
+        "tdatd", /*Kitara - The Devil and the Dragon*/
+        "win", /*Kitara - Whispers in Nalubaale*/
+        "ka", /*Kitara - Kampala Ascendent*/
+        "rar", /*Reign and Reverie*/
+        "mo", /*Magnum Opus*/
+        "df", /*Ashes - Downfall*/
+        "ur", /*Ashes - Uprising*/
+        "sg", /*System Gateway*/ 
+        "su21", /*System Update 2021*/
+      ],
       bans: [
         "30076", /*Catalyst*/ 
         "30077", /*Syndicate*/ 
@@ -45,7 +62,12 @@ function App() {
     },{
       code: "startup",
       name: "Startup",
-      packs: ["sg", "su21", "df", "ur"],
+      packs: [
+        "df", /*Ashes - Downfall*/
+        "ur", /*Ashes - Uprising*/
+        "sg", /*System Gateway*/ 
+        "su21", /*System Update 2021*/
+      ],
       bans: [
         "30076", /*Catalyst*/ 
         "30077", /*Syndicate*/ 
