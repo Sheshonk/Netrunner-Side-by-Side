@@ -143,6 +143,20 @@ function App() {
     let filteredFormat = formats.filter(format => format.code === selectedFormat)[0];
 
     filteredCards = filteredCards.filter(card => card.side_code === selectedSideCode && card.type_code === typeCode && filteredFormat.packs.includes(card.pack_code) && !filteredFormat.bans.includes(card.code) && selectedFactionCodes.includes(card.faction_code))
+
+    //remove dups
+    let x = 0;
+    while (x < filteredCards.length) {
+      let y = x + 1;
+      while (y < filteredCards.length) {
+        if (filteredCards[x].title === filteredCards[y].title) {
+          filteredCards.splice(y, 1);
+        }
+        y++;
+      }
+      x++;
+    }
+
     if (typeCode === "agenda") { //TODO: pass sort in as parameter
       filteredCards = filteredCards.sort((a, b) => a.faction_code.localeCompare(b.faction_code) || b.agenda_points - a.agenda_points || a.advancement_cost - b.advancement_cost || a.title.localeCompare(b.title))
     } else {
