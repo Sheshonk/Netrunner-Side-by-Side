@@ -137,10 +137,17 @@ function App() {
     setSelectedFactionCodes(factions.filter(faction => faction.side_code === newVal).map(faction => faction.code));
   }
 
-  function RenderCard(title, typeCode) {
+  function RenderCard(code, title, index) {
+    return (
+      <a key={index} href={`https://netrunnerdb.com/en/card/${code}`} rel="noreferrer" target="_blank">
+        <img alt={title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${code}.jpg`} />
+      </a>
+    );
+  }
+
+  function RenderCards(title, typeCode) {
     let filteredCards = cards;
     let filteredFormat = formats.filter(format => format.code === selectedFormat)[0];
-    console.log(typeCode);
 
     filteredCards = filteredCards.filter(card => card.side_code === selectedSideCode && card.type_code === typeCode && filteredFormat.packs.includes(card.pack_code) && !filteredFormat.bans.includes(card.code) && selectedFactionCodes.includes(card.faction_code))
 
@@ -173,36 +180,28 @@ function App() {
           <h4>Barrier</h4>
           {
             filteredCards.filter(card => card.keywords.includes("Barrier")).map((card, index) => (
-              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
-                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-              </a>
+              RenderCard(card.code, card.title, index)
             ))
           }
 
           <h4>Code Gate</h4>
           {
             filteredCards.filter(card => card.keywords.includes("Code Gate")).map((card, index) => (
-              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
-                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-              </a>
+              RenderCard(card.code, card.title, index)
             ))
           }
 
           <h4>Sentry</h4>
           {
             filteredCards.filter(card => card.keywords.includes("Sentry")).map((card, index) => (
-              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
-                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-              </a>
+              RenderCard(card.code, card.title, index)
             ))
           }
 
           <h4>Other</h4>
           {
             filteredCards.filter(card => !card.keywords.includes("Barrier") && !card.keywords.includes("Code Gate") && !card.keywords.includes("Sentry")).map((card, index) => (
-              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
-                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-              </a>
+              RenderCard(card.code, card.title, index)
             ))
           }
         </>
@@ -215,45 +214,35 @@ function App() {
           <h4>Fracter</h4>
           {
             filteredCards.filter(card => card.keywords && card.keywords.includes("Fracter")).map((card, index) => (
-              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
-                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-              </a>
+              RenderCard(card.code, card.title, index)
             ))
           }
 
           <h4>Decoder</h4>
           {
             filteredCards.filter(card => card.keywords && card.keywords.includes("Decoder")).map((card, index) => (
-              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
-                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-              </a>
+              RenderCard(card.code, card.title, index)
             ))
           }
 
           <h4>Killer</h4>
           {
             filteredCards.filter(card => card.keywords && card.keywords.includes("Killer")).map((card, index) => (
-              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
-                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-              </a>
+              RenderCard(card.code, card.title, index)
             ))
           }
 
           <h4>AI</h4>
           {
             filteredCards.filter(card => card.keywords && card.keywords.includes("AI")).map((card, index) => (
-              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
-                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-              </a>
+              RenderCard(card.code, card.title, index)
             ))
           }
 
           <h4>Other</h4>
           {
             filteredCards.filter(card => !card.hasOwnProperty("keywords") || (card.keywords && !card.keywords.includes("Icebreaker"))).map((card, index) => (
-              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
-                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-              </a>
+              RenderCard(card.code, card.title, index)
             ))
           }
         </>
@@ -265,9 +254,7 @@ function App() {
 
           {
             filteredCards.map((card, index) => (
-              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
-                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-              </a>
+              RenderCard(card.code, card.title, index)
             ))
           }
         </>
@@ -308,8 +295,8 @@ function App() {
   
       <hr />
       {
-        types.sort((a, b) => a.position - b.position).map((type, index) => (
-          RenderCard(type.name, type.code)
+        types.sort((a, b) => a.position - b.position).map((type) => (
+          RenderCards(type.name, type.code)
         ))
       }
       {/*
