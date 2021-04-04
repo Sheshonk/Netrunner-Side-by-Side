@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import './App.css';
 
 /*
-remove dups
 rob types
 */
 
@@ -158,24 +157,70 @@ function App() {
     }
 
     if (typeCode === "agenda") { //TODO: pass sort in as parameter
-      filteredCards = filteredCards.sort((a, b) => a.faction_code.localeCompare(b.faction_code) || b.agenda_points - a.agenda_points || a.advancement_cost - b.advancement_cost || a.title.localeCompare(b.title))
+      filteredCards = filteredCards.sort((a, b) => a.faction_code.localeCompare(b.faction_code) || b.agenda_points - a.agenda_points || a.advancement_cost - b.advancement_cost || a.title.localeCompare(b.title));
+    } else if (typeCode === "ice") {
+      filteredCards = filteredCards.sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.cost - b.cost);
     } else {
-      filteredCards = filteredCards.sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title))
+      filteredCards = filteredCards.sort((a, b) => a.faction_code.localeCompare(b.faction_code) || a.title.localeCompare(b.title));
     }
 
-    return ( 
-      <>
-        {filteredCards.length > 0 ? <h2>{title}</h2> : (null)}
+    if (typeCode === "ice") {
+      return ( 
+        <>
+          {filteredCards.length > 0 ? <h2>{title}</h2> : (null)}
 
-        {
-          filteredCards.map((card, index) => (
-            <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
-              <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
-            </a>
-          ))
-        }
-      </>
-    )
+          <h4>Barrier</h4>
+          {
+            filteredCards.filter(card => card.keywords.includes("Barrier")).map((card, index) => (
+              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
+                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
+              </a>
+            ))
+          }
+
+          <h4>Code Gate</h4>
+          {
+            filteredCards.filter(card => card.keywords.includes("Code Gate")).map((card, index) => (
+              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
+                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
+              </a>
+            ))
+          }
+
+          <h4>Sentry</h4>
+          {
+            filteredCards.filter(card => card.keywords.includes("Sentry")).map((card, index) => (
+              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
+                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
+              </a>
+            ))
+          }
+
+          <h4>Other</h4>
+          {
+            filteredCards.filter(card => !card.keywords.includes("Barrier") && !card.keywords.includes("Code Gate") && !card.keywords.includes("Sentry")).map((card, index) => (
+              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
+                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
+              </a>
+            ))
+          }
+        </>
+      )
+    } else {
+      return ( 
+        <>
+          {filteredCards.length > 0 ? <h2>{title}</h2> : (null)}
+
+          {
+            filteredCards.map((card, index) => (
+              <a key={index} href={`https://netrunnerdb.com/en/card/${card.code}`} rel="noreferrer" target="_blank">
+                <img alt={card.title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${card.code}.jpg`} />
+              </a>
+            ))
+          }
+        </>
+      )
+    }
   }
 
   return (
