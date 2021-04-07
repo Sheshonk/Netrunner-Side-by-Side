@@ -247,6 +247,87 @@ function App() {
           }
         </>
       )
+    } else if (selectedSideCode === "runner" && typeCode === "hardware") {
+      return (
+        <>
+          {filteredCards.length > 0 ? <h2>{title}</h2> : (null)}
+
+          <h4>Console</h4>
+          {
+            filteredCards.filter(card => card.keywords && card.keywords.includes("Console")).map((card, index) => (
+              RenderCard(card.code, card.title, index)
+            ))
+          }
+
+          <h4>Other</h4>
+          {
+            filteredCards.filter(card => !card.hasOwnProperty("keywords") || (card.keywords && !card.keywords.includes("Console"))).map((card, index) => (
+              RenderCard(card.code, card.title, index)
+            ))
+          }
+        </>
+      )
+    } else if (selectedSideCode === "corp" && (typeCode === "asset" || typeCode === "operation")) {
+      return (
+        <>
+          {filteredCards.length > 0 ? <h2>{title}</h2> : (null)}
+
+          <h4>Econ</h4>
+          {
+            filteredCards.filter(card => card.text.search(/(take|gain) \d+\[credit\]/i) >= 0 || card.text.search(/\d+\[recurring-credit\]/i) >= 0).map((card, index) => (
+              RenderCard(card.code, card.title, index)
+            ))
+          }
+
+          <h4>Draw</h4>
+          {
+            filteredCards.filter(card => card.text.search(/draw/i) >= 0).map((card, index) => (
+              RenderCard(card.code, card.title, index)
+            ))
+          }
+
+          <h4>Punishment</h4>
+          {
+            filteredCards.filter(card => card.text.search(/damage|tag/i) >= 0 || card.text.search(/loses \d+\[credit\]/i) >= 0 || card.text.search(/trash \d+ installed/i) >= 0).map((card, index) => (
+              RenderCard(card.code, card.title, index)
+            ))
+          }
+
+          <h4>Other</h4>
+          {
+            filteredCards.filter(card => card.text.search(/(take|gain) \d+\[credit\]/i) === -1 && card.text.search(/draw/i) === -1 && card.text.search(/damage|tag/i) === -1 && card.text.search(/loses \d+\[credit\]/i) === -1 && card.text.search(/trash \d+ installed/i) === -1 && card.text.search(/\d+\[recurring-credit\]/i) === -1).map((card, index) => (
+              RenderCard(card.code, card.title, index)
+            ))
+          }
+        </>
+      )
+    } else if (selectedSideCode === "runner" && (typeCode === "resource" || typeCode === "event")) {
+      return (
+        <>
+          {filteredCards.length > 0 ? <h2>{title}</h2> : (null)}
+
+          <h4>Econ</h4>
+          {
+            filteredCards.filter(card => card.text.search(/(take|gain) \d+\[credit\]/i) >= 0 || card.text.search(/paying \d+\[credit\] less/i) >= 0 || card.text.search(/\d+\[recurring-credit\]/i) >= 0 || card.text.search(/spend hosted credits/i) >= 0).map((card, index) => (
+              RenderCard(card.code, card.title, index)
+            ))
+          }
+
+          <h4>Draw</h4>
+          {
+            filteredCards.filter(card => card.text.search(/draw/i) >= 0).map((card, index) => (
+              RenderCard(card.code, card.title, index)
+            ))
+          }
+
+          <h4>Other</h4>
+          {
+            filteredCards.filter(card => card.text.search(/(take|gain) \d+\[credit\]/i) === -1 && card.text.search(/draw/i) === -1 && card.text.search(/paying \d+\[credit\] less/i) === -1 && card.text.search(/\d+\[recurring-credit\]/i) === -1 && card.text.search(/spend hosted credits/i) === -1).map((card, index) => (
+              RenderCard(card.code, card.title, index)
+            ))
+          }
+        </>
+      )
     } else {
       return ( 
         <>
