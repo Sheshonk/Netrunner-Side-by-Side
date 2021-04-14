@@ -90,10 +90,10 @@ function App() {
               "30077", /*Syndicate*/ 
             ]
           },{
-            code: "system-update-2021",
-            name: "System Update 2021",
+            code: "system-gateway",
+            name: "System Gateway",
             packs: [
-              "su21", /*System Update 2021*/
+              "sg", /*System Gateway*/ 
             ],
             bans: [
               "30076", /*Catalyst*/ 
