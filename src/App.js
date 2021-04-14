@@ -89,6 +89,16 @@ function App() {
               "30076", /*Catalyst*/ 
               "30077", /*Syndicate*/ 
             ]
+          },{
+            code: "system-update-2021",
+            name: "System Update 2021",
+            packs: [
+              "su21", /*System Update 2021*/
+            ],
+            bans: [
+              "30076", /*Catalyst*/ 
+              "30077", /*Syndicate*/ 
+            ]
           }
         ];
 
