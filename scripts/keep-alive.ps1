@@ -1,0 +1,1 @@
+Invoke-WebRequest -Uri "https://netrunner-formats.azurewebsites.net"

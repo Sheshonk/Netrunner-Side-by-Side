@@ -102,7 +102,7 @@ function App() {
           }
         ];
 
-        let bans = Object.keys(response.data.filter(mwl => mwl.code === "standard-ban-list-21-04")[0].cards);
+        let bans = Object.keys(response.data.filter(mwl => mwl.code === "standard-ban-list-21-06")[0].cards);
         let standard = f.filter(format => format.code === "standard")[0];
         standard.bans = standard.bans.concat(bans);
         setFormats(f);
