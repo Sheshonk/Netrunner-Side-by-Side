@@ -71,7 +71,7 @@ function App() {
               "ur", /*Ashes - Uprising*/
               "sg", /*System Gateway*/ 
               "su21", /*System Update 2021*/
-              "ms", /*midnight sun*/
+              "ms", /*Midnight Sun*/
             ],
             bans: [
               "30076", /*Catalyst*/ 
@@ -85,7 +85,7 @@ function App() {
               "ur", /*Ashes - Uprising*/
               "sg", /*System Gateway*/ 
               "su21", /*System Update 2021*/
-              "ms", /*midnight sun*/
+              "ms", /*Midnight Sun*/
             ],
             bans: [
               "30076", /*Catalyst*/ 
@@ -152,7 +152,7 @@ function App() {
   function RenderCard(code, title, index) {
     return (
       <a key={index} href={`https://netrunnerdb.com/en/card/${code}`} rel="noreferrer" target="_blank">
-        <img alt={title} className="card-image" src={`https://netrunnerdb.com/card_image/large/${code}.jpg`} />
+        <img alt={title} className="card-image" src={`https://static.nrdbassets.com/v1/large/${code}.jpg`} />
       </a>
     );
   }
