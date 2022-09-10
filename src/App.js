@@ -71,6 +71,7 @@ function App() {
               "ur", /*Ashes - Uprising*/
               "sg", /*System Gateway*/ 
               "su21", /*System Update 2021*/
+              "ms", /*midnight sun*/
             ],
             bans: [
               "30076", /*Catalyst*/ 
@@ -84,6 +85,7 @@ function App() {
               "ur", /*Ashes - Uprising*/
               "sg", /*System Gateway*/ 
               "su21", /*System Update 2021*/
+              "ms", /*midnight sun*/
             ],
             bans: [
               "30076", /*Catalyst*/ 
@@ -102,7 +104,7 @@ function App() {
           }
         ];
 
-        let bans = Object.keys(response.data.filter(mwl => mwl.code === "standard-ban-list-21-10")[0].cards);
+        let bans = Object.keys(response.data.filter(mwl => mwl.code === "standard-ban-list-22-08")[0].cards);
         let standard = f.filter(format => format.code === "standard")[0];
         standard.bans = standard.bans.concat(bans);
         setFormats(f);
